@@ -1,0 +1,31 @@
+.full {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: calc(var(--gap) * 8);
+}
+
+.likes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+    gap: 24px;
+}
+
+.counter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: max-content;
+    gap: calc(var(--gap) * 2);
+}
+
+.counter p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: bottom;
+    color: #4F4F4F;
+}

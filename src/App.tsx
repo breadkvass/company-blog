@@ -1,16 +1,18 @@
 import {
   createRoutesFromElements,
   createBrowserRouter,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
-import MainPage from "./pages/mainPage/MainPage";
-import SecondPage from "./pages/secondPage/SecondPage";
+import PostsPage from "./pages/postsPage/PostsPage";
+import PostPage from "./pages/postPage/PostPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<MainPage />} />
-      <Route path="/second" element={<SecondPage />} />
+      <Route path="/" element={<Navigate to={"/posts"} />} />
+      <Route path="/posts" element={<PostsPage />} />
+      <Route path="/posts:id" element={<PostPage />} />
     </Route>
   )
 );

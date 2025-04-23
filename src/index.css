@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --gap: 4px;
+  max-width: 1140px;
+  margin: 0 auto;
 }
 
 a {
@@ -15,10 +19,7 @@ a {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  margin: 0 auto;
   min-height: 100vh;
 }
 
@@ -27,7 +28,12 @@ h1, h2, h3, p, ul, li {
   padding: 0;
 }
 
+li {
+  list-style: none;
+}
+
 button {
+  font-family: "Roboto", sans-serif;
   border: none;
   font-family: inherit;
   background-color: transparent;
