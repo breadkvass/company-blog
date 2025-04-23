@@ -12,7 +12,7 @@ const router = createBrowserRouter(
     <Route>
       <Route path="/" element={<Navigate to={"/posts"} />} />
       <Route path="/posts" element={<PostsPage />} />
-      <Route path="/posts:id" element={<PostPage />} />
+      <Route path="/posts/:id" element={<PostPage />} />
     </Route>
   )
 );

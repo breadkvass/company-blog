@@ -1,14 +1,4 @@
-.second {
-    width: 100vw;
-    min-height: calc(100vh - 120px);
-    background-color: #b4efef;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-}
-
-.second h2 {
-    margin: 0 auto;
-    text-align: center;
-    width: max-content;
+.main {
+    margin: 64px auto;
+    width: 100%;
 }

@@ -8,7 +8,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --gap: 4px;
-  max-width: 1140px;
+  width: 1140px;
   margin: 0 auto;
 }
 
