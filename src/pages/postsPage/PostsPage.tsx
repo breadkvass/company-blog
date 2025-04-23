@@ -1,29 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './PostsPage.module.css';
 import SearchIcon from '../../components/icons/SearchIcon';
+import { getPosts } from '../../utils/api';
+import { Article } from '../../utils/types';
+import Card from '../../components/card/Card';
 
-interface Article {
-    id: number;
-    title: string;
-    content: string;
-}
+
   
 const PostsPage = () => {
     const [searchValue, setSearchValue] = useState('');
-    const [articles] = useState<Article[]>([
-        { id: 1, title: 'React Basics', content: 'Introduction to React...' },
-        { id: 2, title: 'TypeScript Guide', content: 'TypeScript fundamentals...' },
-        // ... другие статьи
-      ]);
-      const [filteredArticles, setFilteredArticles] = useState<Article[]>(articles);
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [filteredArticles, setFilteredArticles] = useState<Article[]>(articles);
+    const [ isLoading, setIsLoading ] = useState(true);
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-    const filtered = articles.filter(article =>
-      article.title.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredArticles(filtered);
-  };
+    const handleSearch = (value: string) => {
+        setSearchValue(value);
+        const filtered = articles.filter(article =>
+            article.title.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredArticles(filtered);
+    };
+
+    useEffect(() => {
+        getPosts()
+            .then((res) => setArticles(res))
+            .finally(() => setIsLoading(false))
+    }, [])
+
+    const visibleArticles = searchValue ? filteredArticles : articles;
 
     return (
         <main className={styles.main}>
@@ -41,12 +45,17 @@ const PostsPage = () => {
                     onChange={(e) => handleSearch(e.target.value)}
                 />
             </div>
-
-            <div className={styles.posts}>
-                {filteredArticles.map(article => (
-                    <div key={article.id}>{article.title}</div>
-                ))}
+            {isLoading ? '' :
+                <div className={styles.posts}>
+                <Card cardType='big' article={articles[0]}/>
+                <ul>
+                    {visibleArticles.slice(1).map(article => (
+                        <li key={article.id} ><Card cardType='small' article={article}/></li>
+                    ))}
+                </ul>
             </div>
+            }
+            
         </main>
     )
 }
