@@ -17,16 +17,14 @@ export const getPosts = async () => {
         method: "GET", 
     })
     .then(checkResponse)
-  };
+};
 
-export const getRandomPhoto = async () => {
-    return await fetch(`${BASE_URL}/albums/1/photos`, {
+export const getPost = async (id: string) => {
+    return await fetch(`${BASE_URL}/posts/${id}`, {
         headers: {
             "Content-Type": "application/json"
         },
         method: "GET", 
     })
     .then(checkResponse)
-    // .then(photos => photos[Math.floor(Math.random() * photos.length)])
-    .then(photos => console.log(photos))
-}
+};

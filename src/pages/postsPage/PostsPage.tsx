@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import styles from './PostsPage.module.css';
-import SearchIcon from '../../components/icons/SearchIcon';
+import { useNavigate } from 'react-router-dom';
 import { getPosts } from '../../utils/api';
 import { Article } from '../../utils/types';
+import SearchIcon from '../../components/icons/SearchIcon';
 import Card from '../../components/card/Card';
-
-
+import styles from './PostsPage.module.css';
   
 const PostsPage = () => {
+    const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
     const [articles, setArticles] = useState<Article[]>([]);
     const [filteredArticles, setFilteredArticles] = useState<Article[]>(articles);
@@ -47,10 +47,10 @@ const PostsPage = () => {
             </div>
             {isLoading ? '' :
                 <div className={styles.posts}>
-                <Card cardType='big' article={articles[0]}/>
+                <Card navigate={navigate} cardType='big' article={articles[0]}/>
                 <ul>
                     {visibleArticles.slice(1).map(article => (
-                        <li key={article.id} ><Card cardType='small' article={article}/></li>
+                        <li key={article.id} ><Card navigate={navigate} cardType='small' article={article}/></li>
                     ))}
                 </ul>
             </div>

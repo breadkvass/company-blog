@@ -1,36 +1,35 @@
-// import { FC, useEffect, useState } from 'react';
-// import { Article, CardType, Image } from '../../utils/types';
-import { FC } from 'react';
-import { Article, CardType } from '../../utils/types';
-import styles from './Card.module.css';
+import { FC, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Article, CardType } from '../../utils/types';
+import { getRandomPastelColor } from '../../utils/utils';
 import BackIcon from '../icons/BackIcon';
 import Likes from '../likes/Likes';
-import { getRandomPastelColor } from '../../utils/utils';
+import styles from './Card.module.css';
 
 type CardProps = {
     article: Article;
     cardType: CardType;
+    navigate: (route: string) => void;
 }
 
-const Card: FC<CardProps> = ({article, cardType}) => {
+const Card: FC<CardProps> = ({article, cardType, navigate}) => {
 
     const imgText = article.title.split(' ')[0];
-    const imgBackground = getRandomPastelColor();
+    const imgBackground = useMemo(() => getRandomPastelColor(), [article.id]) ;
 
     return (
         cardType === 'full-page' ? (
-            <div className={styles.full}>
+            <div className={styles.page}>
                 <div className={styles.header}>
-                    <NavLink to={'./post'}>
+                    <NavLink to={'/posts'}>
                         <BackIcon />
                         <p>Вернуться к статьям</p>
                     </NavLink>
                     <Likes />
                 </div>
+                <h2>{article.title}</h2>
                 <div className={styles.fullPageCard}>
-                    <h3>{article.title}</h3>
-                    <img src={`https://placehold.co/600x300/${imgBackground}/white?text=${imgText}`} loading='lazy' />
+                    <img src={`https://placehold.co/850x480/${imgBackground}/white?text=${imgText}`} loading='lazy' />
                     <p className={styles.text}>{article.body}</p>
                 </div>
             </div>
@@ -44,17 +43,17 @@ const Card: FC<CardProps> = ({article, cardType}) => {
                             <Likes />
                         </div>
                         <p>{article.body}</p>
-                        <button className={styles.readMoreButton}>Читать далее</button>
+                        <button className={styles.readMoreButton} onClick={() => navigate(`/posts/${article.id}`)}>Читать далее</button>
                     </div>
                 </div>
             ) : (
                 <div className={styles.small}>
-                    <img src={`https://placehold.co/850x480/${imgBackground}/white?text=${imgText}`} loading='lazy'/>
+                    <img src={`https://placehold.co/600x300/${imgBackground}/white?text=${imgText}`} loading='lazy'/>
                     <div className={styles.description}>
                         <h3>{article.title}</h3>
                         <div className={styles.header}>
                             <Likes />
-                            <button className={styles.readMoreButton}>Читать далее</button>
+                            <button className={styles.readMoreButton} onClick={() => navigate(`/posts/${article.id}`)}>Читать далее</button>
                         </div>
                     </div>
                 </div>
