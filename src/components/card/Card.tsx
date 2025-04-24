@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Article, CardType } from '../../utils/types';
-import { getRandomPastelColor } from '../../utils/utils';
+import { getPastelColor } from '../../utils/utils';
 import BackIcon from '../icons/BackIcon';
 import Likes from '../likes/Likes';
 import styles from './Card.module.css';
@@ -10,15 +10,16 @@ type CardProps = {
     article: Article;
     cardType: CardType;
     navigate: (route: string) => void;
+    backgroundColor?: string;
 }
 
-const Card: FC<CardProps> = ({article, cardType, navigate}) => {
+const Card: FC<CardProps> = ({article, cardType, navigate, backgroundColor}) => {
 
-    const imgText = article.title.split(' ')[0];
-    const imgBackground = useMemo(() => getRandomPastelColor(), [article.id]) ;
+    const imgText = article ?  article.title.split(' ')[0] : '';
+    const imgBackground = useMemo(() => {return article ? getPastelColor(article.body.length): ''}, [article]);
 
-    return (
-        cardType === 'full-page' ? (
+    return ( article &&
+        (cardType === 'full-page' ? (
             <div className={styles.page}>
                 <div className={styles.header}>
                     <NavLink to={'/posts'}>
@@ -29,7 +30,7 @@ const Card: FC<CardProps> = ({article, cardType, navigate}) => {
                 </div>
                 <h2>{article.title}</h2>
                 <div className={styles.fullPageCard}>
-                    <img src={`https://placehold.co/850x480/${imgBackground}/white?text=${imgText}`} loading='lazy' />
+                    <img src={`https://placehold.co/850x480/${backgroundColor}/white?text=${imgText}`} loading='lazy' />
                     <p className={styles.text}>{article.body}</p>
                 </div>
             </div>
@@ -58,7 +59,7 @@ const Card: FC<CardProps> = ({article, cardType, navigate}) => {
                     </div>
                 </div>
             )
-        )
+        ))
     )
 }
 
