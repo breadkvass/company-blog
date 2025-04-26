@@ -10,7 +10,6 @@ const BackIcon = () => {
                 </clipPath>
             </defs>
         </svg>
-
     )
 }
 

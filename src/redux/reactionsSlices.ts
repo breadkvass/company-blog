@@ -28,7 +28,6 @@ const reactionsSlice = createSlice({
         state.likes.splice(likeIndex, 1);
       }
     },
-    
     toggleDislike: (state, action: PayloadAction<string>) => {
       const postId = action.payload;
       const dislikeIndex = state.dislikes.indexOf(postId);

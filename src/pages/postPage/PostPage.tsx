@@ -1,16 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from '../../hooks/hooks';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from '../../hooks/hooks';
 import { getPosts } from '../../utils/api';
+import { Article } from '../../utils/types';
+import { RootState } from '../../redux/store';
 import Card from '../../components/card/Card';
 import styles from './PostPage.module.css';
-import { Article } from '../../utils/types';
 
 const PostPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id } = useParams();
-    const { data, isLoading, hasError } = useSelector(store => store.posts);
+    const { data, isLoading, hasError } = useSelector((state: RootState) => state.posts);
     const [ post, setPost ] = useState<Article>();
 
     useEffect(() => {

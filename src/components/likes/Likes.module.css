@@ -36,6 +36,7 @@
 
 .dislikeActive svg path {
     fill: #EB5757;
+    fill-opacity: 1;
 }
 
 .counter button svg:hover {
