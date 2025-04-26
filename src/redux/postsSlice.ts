@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Article } from "../../utils/types";
+import { Article } from "../utils/types";
 
 export type PostsState = {
     data: Article[];
@@ -29,9 +29,15 @@ const postsSlice = createSlice({
             state.isLoading = false;
             state.hasError = true;
             state.data = [];
-        }
+        },
+        updatePost: (state, action: PayloadAction<Article>) => {
+            const index = state.data.findIndex(post => post.id === action.payload.id);
+            if (index !== -1) {
+              state.data[index] = action.payload;
+            }
+        },
     }
 })
 
-export const { setLoadingPosts, setDataPosts, setErrorPosts } = postsSlice.actions;
+export const { setLoadingPosts, setDataPosts, setErrorPosts, updatePost } = postsSlice.actions;
 export default postsSlice.reducer;

@@ -11,9 +11,8 @@ const PostsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { data, isLoading, hasError } = useSelector(state => state.posts);
-    // const posts = useSelector(state => state);
     const [searchValue, setSearchValue] = useState('');
-    const [filteredArticles, setFilteredArticles] = useState<Article[]>();
+    const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
 
     const handleSearch = (value: string) => {
         setSearchValue(value);
@@ -23,11 +22,13 @@ const PostsPage = () => {
         setFilteredArticles(filtered);
     };
 
-    useEffect(() => {
-        dispatch(getPosts())
-      }, [dispatch]);
+    useEffect(() => {if (data.length === 0) dispatch(getPosts())}, [dispatch]);
 
-    const visibleArticles = searchValue ? filteredArticles : data;
+    const visibleArticles: Article[] = searchValue ? filteredArticles : data || [];
+    
+    if (isLoading) return 'Загрузка...';
+    if (hasError) return 'Ошибка загрузки';
+    if (!data.length) return 'Нет статей';
 
     return (
         <main className={styles.main}>
@@ -45,29 +46,18 @@ const PostsPage = () => {
                     onChange={(e) => handleSearch(e.target.value)}
                 />
             </div>
-            {isLoading ? 'Загрузка...' : (
-                data ? (
+            {data ? (
                     <div className={styles.posts}>
                     <Card navigate={navigate} cardType='big' article={data[0]}/>
                     <ul>
-                        {visibleArticles && visibleArticles.slice(1).map(article => (
+                        {(visibleArticles || []).slice(1).map(article => (
                             <li key={article.id} ><Card navigate={navigate} cardType='small' article={article}/></li>
                         ))}
                     </ul>
                 </div>
-                ) : (hasError ? 'Ошибка загрузки' : 'Неизвестная ошибка')
-            )}
-        {/* {hasError && 'Произошла ошибка'}
-        {!isLoading && !hasError && data && data.length > 0 &&
-                <div className={styles.posts}>
-                    <Card navigate={navigate} cardType='big' article={data[0]}/>
-                    <ul>
-                        {visibleArticles && visibleArticles.slice(1).map(article => (
-                            <li key={article.id} ><Card navigate={navigate} cardType='small' article={article}/></li>
-                        ))}
-                    </ul>
-                </div>
-            } */}
+            ) : (
+                hasError ? 'Ошибка загрузки' : 'Неизвестная ошибка')
+            }
             
         </main>
     )
