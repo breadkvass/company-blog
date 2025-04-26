@@ -12,24 +12,22 @@ const PostsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { data, isLoading, hasError } = useSelector((state: RootState) => state.posts);
-    const [searchValue, setSearchValue] = useState('');
-    const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+    const [ searchValue, setSearchValue ] = useState('');
+    const [ filteredArticle, setFilteredArticle ] = useState<Article>();
 
     const handleSearch = (value: string) => {
         setSearchValue(value);
-        const filtered = data.filter(post =>
-            post.title.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredArticles(filtered);
+        const filtered = data.filter(post => post.title === value);
+        setFilteredArticle(filtered[0]);
     };
 
     useEffect(() => {if (data.length === 0) dispatch(getPosts())}, [dispatch]);
 
-    const visibleArticles: Article[] = searchValue ? filteredArticles : data || [];
+    const visibleArticles: Article[] = filteredArticle ? [filteredArticle] : data || [];
     
     if (isLoading) return 'Загрузка...';
     if (hasError) return 'Ошибка загрузки';
-    if (!data.length) return 'Нет статей';
+    if (!data.length) return 'Статьи не найдены';
 
     return (
         <main className={styles.main}>
@@ -49,7 +47,7 @@ const PostsPage = () => {
             </div>
             {data ? (
                     <div className={styles.posts}>
-                    <Card navigate={navigate} cardType='big' article={data[0]}/>
+                    <Card navigate={navigate} cardType='big' article={filteredArticle ? filteredArticle : data[0]}/>
                     <ul>
                         {(visibleArticles || []).slice(1).map(article => (
                             <li key={article.id} ><Card navigate={navigate} cardType='small' article={article}/></li>
