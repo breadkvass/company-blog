@@ -1,5 +1,7 @@
-import { setLoadingPosts, setDataPosts, setErrorPosts } from '../redux/posts/postsSlice';
+import { setLoadingPosts, setDataPosts, setErrorPosts } from '../redux/postsSlice';
 import { AppDispatch } from '../redux/store';
+import { getRandomPastelColor } from './utils';
+import { Article } from './types';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -22,52 +24,25 @@ export const getPosts = () => (dispatch: AppDispatch) => {
   fetchGetPosts()
     .then(checkResponse)
     .then((res) => {
-      dispatch(setDataPosts(res));
+      const articles = res.map((article: Article) => {
+        return {
+          id: article.id.toString(),
+          title: article.title,
+          img: getRandomPastelColor(),
+          body: article.body,
+          userId: article.userId.toString(),
+          imgText: article.title.split(' ')[0],
+          likes: Math.floor(Math.random() * 51),
+          dislikes: Math.floor(Math.random() * 51)
+        }
+      })
+      dispatch(setDataPosts(articles));
     })
     .catch((error) => {
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : 'Неизвестная ошибка при загрузке данных';
-      console.log(errorMessage)
+        const errorMessage = error instanceof Error 
+            ? error.message 
+            : 'Неизвестная ошибка при загрузке данных';
+        setErrorPosts()
+        console.log(errorMessage)
     })
-    .finally(() => {
-      // Любая дополнительная логика после завершения запроса
-      // Например, можно добавить трекинг завершения загрузки
-    });
-};
-
-
-// export const getPosts = () => {
-//     return (dispatch: AppDispatch) => {
-//       dispatch(setLoadingPosts());
-  
-//       fetchGetPosts()
-//           .then(checkResponse)
-//           .then(checkResponse)
-//           .then(res => dispatch(setDataPosts(res)))
-//           .catch(err => {
-//               dispatch(setErrorPosts());
-//               console.log(err);
-//           })
-//     }
-// }
-
-// export const getPosts = async () => {
-//     return await fetch(`${BASE_URL}/posts`, {
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         method: "GET", 
-//     })
-//     .then(checkResponse)
-// };
-
-export const getPost = async (id: string) => {
-    return await fetch(`${BASE_URL}/posts/${id}`, {
-        headers: {
-            "Content-Type": "application/json"
-        },
-        method: "GET", 
-    })
-    .then(checkResponse)
 };

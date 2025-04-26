@@ -1,8 +1,12 @@
 export type Article = {
     body: string;
-    id: number;
+    id: string;
     title: string;
     userId: number;
+    imgText: string;
+    img: string;
+    likes: number;
+    dislikes: number;
 }
 
 export type CardType = 'small' | 'big' | 'full-page';
