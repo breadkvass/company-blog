@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getPosts } from '../../utils/api';
 import { Article } from '../../utils/types';
 import { useDispatch, useSelector } from '../../hooks/hooks';
+import { RootState } from '../../redux/store';
 import SearchIcon from '../../components/icons/SearchIcon';
 import Card from '../../components/card/Card';
 import styles from './PostsPage.module.css';
@@ -10,7 +11,7 @@ import styles from './PostsPage.module.css';
 const PostsPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { data, isLoading, hasError } = useSelector(state => state.posts);
+    const { data, isLoading, hasError } = useSelector((state: RootState) => state.posts);
     const [searchValue, setSearchValue] = useState('');
     const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
 

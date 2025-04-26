@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from '../../hooks/hooks';
 import { RootState } from '../../redux/store';
 import { toggleDislike, toggleLike } from '../../redux/reactionsSlices';
+import { updatePost } from '../../redux/postsSlice';
 import DislikeIcon from '../icons/DislikeIcon';
 import LikeIcon from '../icons/LikeIcon';
 import styles from './Likes.module.css';
-import { updatePost } from '../../redux/postsSlice'; // Новый экшен
 
 type LikesProps = {
     postId: string;
@@ -13,12 +13,8 @@ type LikesProps = {
 
 const Likes: FC<LikesProps> = ({ postId }) => {
     const dispatch = useDispatch();
-    
-    // Получаем актуальные данные из стора
     const { likes, dislikes } = useSelector((state: RootState) => state.reactions);
-    const post = useSelector((state: RootState) => 
-        state.posts.data.find(p => p.id === postId)
-    );
+    const post = useSelector((state: RootState) => state.posts.data.find(p => p.id === postId));
 
     if (!post) return null;
 
