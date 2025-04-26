@@ -1,45 +1,35 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from '../../hooks/hooks';
-import { useEffect, useMemo, useState } from 'react';
-import { getPost } from '../../utils/api';
-import { Article } from '../../utils/types';
-import { getPastelColor } from '../../utils/utils';
+import { useDispatch, useSelector } from '../../hooks/hooks';
+import { useEffect, useState } from 'react';
+import { getPosts } from '../../utils/api';
 import Card from '../../components/card/Card';
 import styles from './PostPage.module.css';
+import { Article } from '../../utils/types';
 
 const PostPage = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { id } = useParams();
-    const { data } = useSelector(state => state.posts);
+    const { data, isLoading, hasError } = useSelector(store => store.posts);
     const [ post, setPost ] = useState<Article>();
-    const [ isLoading, setIsLoading ] = useState(false);
-    const [ isError, setIsError ] = useState(false);
-
-    const article = useMemo(() => data.find(ingredient => ingredient.id.toString() === id), []);
-    
-    const imgBackground = useMemo(() =>{ return article ? getPastelColor(article.body.length) : ''}, [article]);
 
     useEffect(() => {
-        if (id) {
-            if (article && data.length > 0) {
-                setPost(article);
-            } else {
-                setIsLoading(true);
-                getPost(id)
-                    .then((res) => setPost(res))
-                    .catch(() => setIsError(true))
-                    .finally(() => setIsLoading(false))
-           }
+        if (data.length === 0) {
+            dispatch(getPosts());
         }
-    }, [id, data])
+
+        setPost(data.find(post => post.id === id))
+    }, [data])
 
     return (
         <main className={styles.main}>
-            {isLoading ? (
-                'Загрузка статьи...'
-            ) : (
-                isError ? ('Ошибка загрузки') : (post && <Card article={post} navigate={navigate} cardType='full-page' backgroundColor={imgBackground} />)
-            )}
+            {post ? <Card article={post} navigate={navigate} cardType='full-page' /> : (
+                isLoading ? (
+                    'Загрузка статьи...'
+                ) : (
+                    hasError ? 'Ошибка' : null
+                ))
+            }
         </main>
     )
 }
